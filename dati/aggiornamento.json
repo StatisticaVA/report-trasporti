@@ -6,8 +6,8 @@
   "dimensione": 12552608,
   "ultima_modifica": "Thu, 25 Jun 2026 12:27:10 GMT",
   "sha256": "1e93f15593cc1fa18fd1b23ae41c4bcc7c08a783bb9e943f0758459605bd6fc5",
-  "scaricato": "2026-10-07T12:51:15Z",
-  "controllato": "2026-10-07T12:51:15Z",
+  "scaricato": "2026-10-07T13:41:24Z",
+  "controllato": "2026-10-07T13:41:24Z",
   "anni_dettaglio": [
    2024,
    2025
@@ -15,13 +15,13 @@
   "dati_modificati": "2026-10-07T12:51:15Z"
  },
  "istat_popolazione": {
-  "scaricato": "2026-10-07T12:55:48Z",
-  "controllato": "2026-10-07T12:55:48Z",
+  "scaricato": "2026-10-07T13:42:49Z",
+  "controllato": "2026-10-07T13:42:49Z",
   "ultimo_anno": 2026,
   "righe": 75,
   "ultimo_aggiornamento_istat": "2026-03-31T08:03:43.724Z",
   "dati_modificati": "2026-10-07T12:55:48Z"
  },
- "controllato": "2026-10-07T12:55:48Z",
+ "controllato": "2026-10-07T13:42:49Z",
  "avvisi": []
 }
