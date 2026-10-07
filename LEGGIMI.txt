@@ -1,0 +1,64 @@
+TRASPORTI – STRADE (autovetture · Varese, Lombardia, Italia)
+================================================================
+Versione 1.0 – 07/10/2026. Sito separato dagli altri (import/export, imprese, credito, lavoro, popolazione, conti economici), con il logo della Camera di Commercio di Varese.
+
+A COSA SERVE
+Crea le 6 tabelle Excel per Osserva della sezione «Trasporti → Strade» (autovetture), con i dati dell'Automobile Club d'Italia (ACI) e di ISTAT.
+Non serve installare niente: è una pagina web che funziona nel browser (Chrome, Edge, Firefox, Safari).
+
+DA DOVE VENGONO I NUMERI
+- Autovetture: file «Autoritratto» dell'ACI (open data, licenza CC-BY 4.0), parco veicolare al 31 dicembre, dal Pubblico Registro Automobilistico.
+  Province lombarde = righe del file; Lombardia = somma delle 12 province; Italia = somma di tutte le province (uguale al «Totale NAZIONALE» del file).
+- Classi Euro e alimentazione di Varese: foglio «Circolante Copert» dello stesso file. Cilindrata di Varese: foglio «Autovetture per provincia e cilindrata».
+- Popolazione (per «autovetture ogni 100 abitanti»): ISTAT, popolazione residente al 1° gennaio. Regola dell'ufficio: autovetture al 31/12 dell'anno ÷ popolazione al 1° gennaio
+  dello STESSO anno (è già definitiva). I decimali non si arrotondano (altrimenti la variazione % non è esatta).
+- Gli anni passati restano quelli della loro edizione ACI e non si ricalcolano. Fino al 2023 i numeri di Varese, Lombardia e Italia sono quelli del foglio di lavoro
+  dell'ufficio (archivio iniziale, dati/aci_autovetture.csv, colonna «fonte» = archivio; Varese dal 2009, Lombardia e Italia dal 2020: l'ACI pubblica in open data
+  solo le edizioni dal 2019); dal 2024 vengono dal file ACI.
+
+COME SI USA
+1. Apri la pagina (sito pubblicato oppure doppio clic su index.html).
+2. Riquadro «2 · Dati»: se è VERDE i dati sono già caricati, non devi fare niente. Se è ARANCIONE, scarica dal sito pubblicato i tre file CSV della cartella «dati»
+   (aci_autovetture.csv, aci_varese_dettaglio.csv, istat_popolazione.csv) e trascinali nel riquadro tratteggiato, senza aprirli.
+3. Scegli l'anno (la pagina propone da sola l'ultimo).
+4. Controlla che le 6 tabelle siano «pronte» e premi «Genera tabelle». Scarica i file uno per uno o tutti insieme con «Scarica tutto (ZIP)».
+
+TABELLE PRODOTTE (nomi, fogli e intestazioni come i file di Osserva, in formato .xlsx)
+- Trasporto_su_strada_sintesi.xlsx                  (foglio Foglio2)  Varese, Lombardia, Italia: autovetture e «ogni 100 abitanti», anno prima e anno scelto, T.var %
+- Trasporto_su_strada_sintesi_x_grafico.xlsx        (Foglio2)  autovetture di Varese, anno prima e anno scelto
+- Trasporto_su_strada_tempo.xlsx                    (Foglio1)  Varese, ultimi 15 anni: autovetture, T.var % sull'anno prima, autovetture ogni 100 abitanti
+- Trasporto_su_strada_tipologia_euro.xlsx           (Foglio1)  Varese: Euro 0-6, alimentazione elettrica, non definito, totale, peso %
+- Trasporto_su_strada_tipologia_alimentazione.xlsx  (Foglio1)  Varese: benzina, benzina e gas liquido, benzina e metano, elettricità, gasolio, ibrido benzina, ibrido gasolio, metano, altre e non definito
+- Trasporto_su_strada_tipologia_cilindrata.xlsx     (Foglio1)  Varese: fino a 1200, 1201-2000, 2001-3000, oltre 3000, non definito
+Raggruppamenti: Euro 5 = Euro 5 + 5B; Euro 6 = Euro 6, 6A, 6B, 6C, 6D, 6E; «Alimentazione elettrica» = veicoli senza classe Euro (sono le elettriche);
+Ibrido benzina = ibrido benzina + ibrido benzina GPL + ibrido benzina metano; «Gasolio e gas» (gasolio con impianto a gas) conta tra i Gasolio; Altre = «altre» + «non definito»;
+cilindrata: fino a 1200 = fino a 800 + 801-1200; 1201-2000 = 1201-1600 + 1601-1800 + 1801-2000; 2001-3000 = 2001-2500 + 2501-3000.
+I numeri sono numeri veri; variazioni e pesi non sono arrotondati e hanno 2 decimali nel formato; «ogni 100 abitanti» ha 2 decimali visibili (nei vecchi file di Osserva
+il formato li nascondeva e mostrava un numero intero).
+
+AGGIORNAMENTO AUTOMATICO DEI DATI (.github/workflows/aggiorna-dati.yml, ogni giorno alle 06:00 UTC, cioè le 8 in Italia con l'ora legale e le 7 con quella solare)
+L'ACI non ha un'API: pubblica un file all'anno. Il sito dell'ACI non permette a una pagina web di leggere i dati da sola, per questo c'è un programma su GitHub (aggiorna_dati.py):
+1. legge la pagina «Open data» dell'ACI e trova da solo i link dei file «Autoritratto» (l'indirizzo del file contiene mese e anno di caricamento e cambia: non è scritto
+   nel programma); controlla ogni giorno con una richiesta leggera (dimensione e data del file); scarica il file (12 MB, .zip o .rar) solo quando esce una nuova edizione
+   o l'ACI lo ricarica;
+2. lo apre (per i .rar il workflow installa bsdtar), legge i fogli che servono e li controlla: titoli e intestazioni, Lombardia e Italia = totali del file, somma delle colonne =
+   totale, Varese uguale nei tre fogli, variazione sull'anno prima (oltre ±3% avviso, oltre ±8% blocco), stesso anno ricaricato con numeri diversi (oltre lo 0,5% blocco);
+3. salva dati/aci_autovetture.csv e dati/aci_varese_dettaglio.csv senza toccare gli anni più vecchi;
+4. ISTAT: controlla la data di aggiornamento (una richiesta) e, solo se è cambiata o se sono passati 28 giorni, riscarica la popolazione al 1° gennaio di Varese, Lombardia e Italia
+   (dati/istat_popolazione.csv);
+5. le due parti sono indipendenti: se una ha un problema l'altra si aggiorna lo stesso e i file della parte con il problema non vengono toccati.
+Se qualcosa non funziona (sito che non risponde, file o link cambiati, numeri non plausibili) arriva un'e-mail con la spiegazione; se l'ACI o ISTAT non hanno pubblicato niente
+di nuovo non arriva nulla. L'ACI pubblica «entro il mese di luglio» (nel 2025 l'edizione 2024 è uscita a novembre, quella 2025 il 25 giugno 2026).
+Si può lanciare a mano: GitHub → «Actions» → «Aggiorna dati trasporti» → «Run workflow» («Forza» riscarica tutto, «Accetta» salva anche se un controllo di plausibilità segnala
+un'anomalia dopo che l'hai verificata a mano, «Prova» simula un problema per provare l'e-mail).
+
+FILE
+index.html                           la pagina (motore + interfaccia, un solo file, senza librerie esterne)
+LEGGIMI.txt                          queste istruzioni
+aggiorna_dati.py                     scarica e controlla i dati (solo libreria standard di Python; per i .rar serve bsdtar, 7z, unrar o unar)
+segnala_problemi.py                  avviso per e-mail se l'aggiornamento non riesce
+.github/workflows/aggiorna-dati.yml  il controllo automatico giornaliero
+dati/aci_autovetture.csv             anno, territorio, autovetture, fonte (12 province lombarde, Lombardia, Italia; fonte «aci» o «archivio»)
+dati/aci_varese_dettaglio.csv        Varese: alimentazione x classe Euro (tavola «copert») e cilindrata (tavola «cilindrata»), un blocco per anno
+dati/istat_popolazione.csv           popolazione al 1° gennaio di Varese, Lombardia, Italia dal 2002 (stato «e» = provvisoria)
+dati/aggiornamento.json              date dei controlli, file ACI usato, anni disponibili, avvisi
